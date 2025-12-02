@@ -1,0 +1,133 @@
+import { Product } from './types';
+
+export const MOCK_PRODUCTS: Product[] = [
+  {
+    id: '1',
+    title: 'Samsung Galaxy S23 Ultra 5G 256GB Phantom Black',
+    price: 5999.00,
+    originalPrice: 9499.00,
+    image: 'https://picsum.photos/400/400?random=1',
+    freeShipping: true,
+    fullDelivery: true,
+    rating: 4.8,
+    reviews: 1250,
+    installments: 12,
+    category: 'Celulares',
+    sold: 5000,
+    description: 'O Samsung Galaxy S23 Ultra é o smartphone Android mais avançado da categoria. Tem uma grande tela de 6.8 polegadas com resolução de 3088x1440 pixels. As funcionalidades oferecidas pelo Samsung Galaxy S23 Ultra são muitas e inovadoras. Começando pelo 5G que permite a transferência de dados e excelente navegação na internet.'
+  },
+  {
+    id: '2',
+    title: 'Notebook Dell Inspiron 15 3000 Core i5 8GB 256GB SSD',
+    price: 3299.00,
+    originalPrice: 3899.00,
+    image: 'https://picsum.photos/400/400?random=2',
+    freeShipping: true,
+    fullDelivery: true,
+    rating: 4.6,
+    reviews: 840,
+    installments: 10,
+    category: 'Informática',
+    sold: 2300,
+    description: 'Notebook Dell Inspiron i5, perfeito para produtividade e multitarefa. Tela Full HD de 15.6 polegadas, teclado numérico e design leve.'
+  },
+  {
+    id: '3',
+    title: 'Smart TV 50" 4K UHD LG LED Wi-Fi Bluetooth HDR10 Pro',
+    price: 2399.90,
+    image: 'https://picsum.photos/400/400?random=3',
+    freeShipping: true,
+    fullDelivery: false,
+    rating: 4.7,
+    reviews: 3200,
+    installments: 12,
+    category: 'Eletrônicos',
+    sold: 10000,
+    description: 'A verdadeira experiência 4K com cores vivas e detalhes incríveis. Processador AI a5 Gen5 4K para aprimorar sua experiência de visualização.'
+  },
+  {
+    id: '4',
+    title: 'Tênis Nike Revolution 6 Next Nature Masculino',
+    price: 299.99,
+    originalPrice: 399.99,
+    image: 'https://picsum.photos/400/400?random=4',
+    freeShipping: false,
+    fullDelivery: true,
+    rating: 4.5,
+    reviews: 5600,
+    installments: 6,
+    category: 'Moda',
+    sold: 15000,
+    description: 'Conforto para a sua corrida. O Nike Revolution 6 tem um design simples. O conforto é a chave para o sucesso da sua corrida.'
+  },
+  {
+    id: '5',
+    title: 'Fritadeira Elétrica Air Fryer Mondial 4L Inox',
+    price: 349.90,
+    originalPrice: 499.90,
+    image: 'https://picsum.photos/400/400?random=5',
+    freeShipping: true,
+    fullDelivery: true,
+    rating: 4.9,
+    reviews: 8900,
+    installments: 8,
+    category: 'Eletrodomésticos',
+    sold: 22000,
+    description: 'Praticidade e saúde na sua cozinha. Prepare alimentos sem óleo, com a rapidez e eficiência que você precisa.'
+  },
+  {
+    id: '6',
+    title: 'Console PlayStation 5 + God of War Ragnarök',
+    price: 4499.00,
+    image: 'https://picsum.photos/400/400?random=6',
+    freeShipping: true,
+    fullDelivery: true,
+    rating: 5.0,
+    reviews: 450,
+    installments: 12,
+    category: 'Games',
+    sold: 1200,
+    description: 'Jogue como nunca antes. O PS5 traz carregamento ultrarrápido com um SSD de ultra-alta velocidade, imersão mais profunda com suporte a feedback tátil, gatilhos adaptáveis e áudio 3D.'
+  },
+  {
+    id: '7',
+    title: 'Fone de Ouvido JBL Tune 510BT Bluetooth',
+    price: 249.00,
+    originalPrice: 299.00,
+    image: 'https://picsum.photos/400/400?random=7',
+    freeShipping: true,
+    fullDelivery: true,
+    rating: 4.7,
+    reviews: 15000,
+    installments: 3,
+    category: 'Áudio',
+    sold: 35000,
+    description: 'Os fones de ouvido JBL Tune 510BT permitem que você transmita o potente som JBL Pure Bass sem fios. Fáceis de usar, esses fones de ouvido proporcionam até 40 horas de puro prazer.'
+  },
+  {
+    id: '8',
+    title: 'Cadeira Gamer ThunderX3 EC3 Preta',
+    price: 999.90,
+    originalPrice: 1299.90,
+    image: 'https://picsum.photos/400/400?random=8',
+    freeShipping: false,
+    fullDelivery: false,
+    rating: 4.4,
+    reviews: 320,
+    installments: 10,
+    category: 'Games',
+    sold: 800,
+    description: 'Construída com a tecnologia AIR Tech, a EC3 oferece respirabilidade superior. O design ergonômico proporciona amplo suporte para longas sessões de jogos.'
+  }
+];
+
+export const CATEGORIES = [
+  'Todos',
+  'Celulares',
+  'Informática',
+  'Eletrodomésticos',
+  'Moda',
+  'Games',
+  'Eletrônicos',
+  'Áudio'
+];
