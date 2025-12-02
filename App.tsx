@@ -4,10 +4,6 @@ import { Product, CartItem } from './types';
 import ProductCard from './components/ProductCard';
 import AIChatAssistant from './components/AIChatAssistant';
 
-// Using a custom router logic since HashRouter requires react-router-dom and I want to keep dependencies minimal 
-// while adhering to the single file output spirit for "pure html" feel, but structured as React.
-// However, the prompt allows HashRouter. I will implement a simple state-based view switcher for maximum stability without external router lib dependency issues in this format.
-
 enum View {
   HOME = 'HOME',
   PRODUCT_DETAIL = 'PRODUCT_DETAIL',
@@ -17,9 +13,57 @@ enum View {
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.HOME);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [cart, setCart] = useState<CartItem[]>([]);
+  
+  // Initialize cart from LocalStorage
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('ml_clone_cart');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+
+  // Persist Cart
+  useEffect(() => {
+    localStorage.setItem('ml_clone_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  // Handle URL-based routing (MPA simulation)
+  useEffect(() => {
+    const path = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+
+    if (path.endsWith('cart.html')) {
+      setCurrentView(View.CART);
+    } else if (path.endsWith('product.html')) {
+      const id = params.get('id');
+      const product = MOCK_PRODUCTS.find(p => p.id === id);
+      if (product) {
+        setSelectedProduct(product);
+        setCurrentView(View.PRODUCT_DETAIL);
+      } else {
+        // Fallback to home if product not found
+        window.location.href = 'index.html';
+      }
+    } else {
+      // Default / Home
+      setCurrentView(View.HOME);
+      
+      // Check for search or category params
+      const cat = params.get('category');
+      if (cat && CATEGORIES.includes(cat)) {
+        setSelectedCategory(cat);
+      }
+      
+      const search = params.get('q');
+      if (search) {
+        setSearchQuery(search);
+      }
+    }
+  }, []);
 
   // Filter products logic
   const filteredProducts = MOCK_PRODUCTS.filter(p => {
@@ -40,20 +84,40 @@ const App: React.FC = () => {
   };
 
   const handleProductClick = (product: Product) => {
-    setSelectedProduct(product);
-    setCurrentView(View.PRODUCT_DETAIL);
-    window.scrollTo(0, 0);
+    // Navigate to product.html
+    window.location.href = `product.html?id=${product.id}`;
   };
 
   const goHome = () => {
-    setCurrentView(View.HOME);
-    setSelectedProduct(null);
+    window.location.href = 'index.html';
+  };
+  
+  const goToCart = () => {
+    window.location.href = 'cart.html';
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    // Optional: Update URL without reload for better UX on home, or reload if strict MPA desired
+    if (currentView !== View.HOME) {
+      window.location.href = `index.html?q=${encodeURIComponent(query)}`;
+    }
+  };
+
+  const handleCategorySelect = (cat: string) => {
+    if (currentView !== View.HOME) {
+      window.location.href = `index.html?category=${encodeURIComponent(cat)}`;
+    } else {
+      setSelectedCategory(cat);
+      // Optional: update URL
+      const url = new URL(window.location.href);
+      url.searchParams.set('category', cat);
+      window.history.pushState({}, '', url);
+    }
   };
 
   const cartTotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
-  // Components defined inline for file cohesion in this format, but separated logically
-  
   const Navbar = () => (
     <header className="bg-ml-yellow shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3">
@@ -72,17 +136,20 @@ const App: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => {
-                if(e.key === 'Enter') goHome();
+                if(e.key === 'Enter') handleSearch(searchQuery);
               }}
             />
-            <button className="bg-white px-4 py-2 rounded-r-md border-l border-gray-100 shadow-sm text-gray-500 hover:text-ml-blue">
+            <button 
+              onClick={() => handleSearch(searchQuery)}
+              className="bg-white px-4 py-2 rounded-r-md border-l border-gray-100 shadow-sm text-gray-500 hover:text-ml-blue"
+            >
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
 
           {/* Menu Items */}
           <div className="hidden md:flex items-center gap-6 text-sm text-ml-dark/80">
-            <span className="cursor-pointer hover:text-ml-dark">Categorias</span>
+            <span className="cursor-pointer hover:text-ml-dark" onClick={() => handleCategorySelect('Todos')}>Categorias</span>
             <span className="cursor-pointer hover:text-ml-dark">Ofertas</span>
             <span className="cursor-pointer hover:text-ml-dark">Histórico</span>
             <span className="cursor-pointer hover:text-ml-dark">Moda</span>
@@ -90,7 +157,7 @@ const App: React.FC = () => {
 
           {/* User Actions */}
           <div className="flex items-center gap-4 text-ml-dark">
-            <div className="relative cursor-pointer" onClick={() => setCurrentView(View.CART)}>
+            <div className="relative cursor-pointer" onClick={goToCart}>
               <i className="fa-solid fa-cart-shopping text-lg"></i>
               {cart.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-ml-blue text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
@@ -110,7 +177,7 @@ const App: React.FC = () => {
             {CATEGORIES.map(cat => (
               <button 
                 key={cat}
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => handleCategorySelect(cat)}
                 className={`whitespace-nowrap px-2 py-1 rounded transition-colors ${selectedCategory === cat ? 'bg-black/5 font-bold text-ml-dark' : 'hover:bg-black/5'}`}
               >
                 {cat}

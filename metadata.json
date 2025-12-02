@@ -1,5 +1,5 @@
 {
-  "name": "MercadoClone AI",
+  "name": "V3ndas Online",
   "description": "Um clone funcional do Mercado Livre com integração de Inteligência Artificial para assistência de compras, utilizando React, Tailwind e Gemini API.",
   "requestFramePermissions": []
 }
